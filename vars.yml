@@ -1,0 +1,12 @@
+--- 
+steam_usr: steamusr
+valheim_usr: '{{ steam_usr }}'
+steam_usrs_group: steamgroup
+steam_usr_passwd: "{{ lookup('password', 'credentials/' + steam_usr + '/passwd chars=ascii_letters,digits length=128') }}"
+pub_ssh_key: id_rsa.pub
+valheim_server_name: "ServerName"
+valheim_server_port: 2457
+valheim_server_world: "WorldName"
+valheim_server_passwd: "L33tH4ck3rS4f3"
+valheim_server_savedir: "/home/{{ valheim_usr }}/vhsaves"
+valheim_server_vis: 0

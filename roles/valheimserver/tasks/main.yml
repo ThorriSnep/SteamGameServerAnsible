@@ -1,0 +1,55 @@
+---
+- name: Create the Steam directory for SteamCMD
+  ansible.builtin.file:
+    path: "~/Steam"
+    state: directory
+
+- name: Create tmp directory 
+  ansible.builtin.file:
+    path: "/tmp/steamcmdinstall"
+    state: directory
+
+- name: Download steamCMD
+  get_url:
+    url: "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz"
+    dest: '/tmp/steamcmdinstall/'
+
+- name: Extract steamcmd_linux.tar.gz into ~/Steam
+  ansible.builtin.unarchive:
+    remote_src: yes
+    src: '/tmp/steamcmdinstall/steamcmd_linux.tar.gz'
+    dest: '~/Steam'
+
+- name: Execute sudo stuff
+  block:
+    - name: Install lib32gcc-s1
+      ansible.builtin.apt:
+        update_cache: yes
+        name: lib32gcc-s1
+        state: latest
+
+  become: true
+  become_user: root
+
+- name: Delete tmp directory 
+  ansible.builtin.file:
+    path: "/tmp/steamcmdinstall"
+    state: absent
+
+- name: Create Valheim Save directory 
+  ansible.builtin.file:
+    path: "{{ valheim_server_savedir }}"
+    state: directory
+
+- name: Install Valheim dedicated Server
+  ansible.builtin.command: 
+    cmd: "bash ~/Steam/steamcmd.sh +@sSteamCmdForcePlatformType linux +force_install_dir ~/Valheimserver +login anonymous +app_update 896660 validate +quit"
+
+- name: create Valheim config  
+  ansible.builtin.template:
+    src: templates/start_server.sh.j2
+    dest: ~/Valheimserver/start_server.sh
+
+- name: Install Valheim dedicated Server
+  ansible.builtin.command: 
+    cmd: "bash ~/Valheimserver/start_server.sh"

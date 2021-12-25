@@ -1,0 +1,14 @@
+---
+- name: Create user for steam server and add ssh key
+  hosts: all
+  vars_files: vars.yml
+  remote_user: root
+  roles:
+    - createusr
+
+- name: Create Valheim Server
+  hosts: all
+  vars_files: vars.yml
+  remote_user: '{{ valheim_usr }}'
+  roles:
+    - valheimserver

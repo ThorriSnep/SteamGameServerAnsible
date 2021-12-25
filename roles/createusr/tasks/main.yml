@@ -1,0 +1,39 @@
+---
+- name: Ensure group {{ steam_usrs_group }} exists
+  ansible.builtin.group:
+    name: '{{ steam_usrs_group}}'
+    state: present
+
+- name: Create steam user
+  ansible.builtin.user:
+    shell: /bin/bash
+    name: '{{ steam_usr }}'
+    password:  "{{ steam_usr_passwd | password_hash('sha512') }}"
+    groups: '{{ steam_usrs_group }},sudo'
+    append: yes
+        
+- name: Create the ssh directory if it does not exist
+  ansible.builtin.file:
+    path: "/home/{{ steam_usr }}/.ssh"
+    state: directory
+    owner: '{{ steam_usr }}'
+    group: '{{ steam_usrs_group }}'
+    mode: u=rwx,g=rwx,o=rx
+
+- name: Create autorized_keys file
+  ansible.builtin.file:
+    path: "/home/{{ steam_usr }}/.ssh/authorized_keys"
+    state: touch
+    owner: '{{ steam_usr }}'
+    group: '{{ steam_usrs_group }}'
+    mode: u=rw,g=r,o=r
+
+- name: Insert public ssh key to autorized_keys 
+  ansible.builtin.blockinfile:
+    block: "{{ lookup('file', '~/.ssh/{{ pub_ssh_key }}') }}"
+    path: "/home/{{ steam_usr}}/.ssh/authorized_keys"
+
+- name: No Sudo password for user
+  ansible.builtin.blockinfile:
+    block: "{{ steam_usr }} ALL=(ALL) NOPASSWD:ALL"
+    path: "/etc/sudoers"
