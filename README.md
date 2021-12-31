@@ -1,6 +1,13 @@
 # AnsibleValheimPlaybook
 An Ansible playbook to set up a dedicated Valheim server
 
+
+Works on:
+- Ubuntu 20.04
+- Ubuntu 18.04
+- Debian 10
+- Debian 9
+
 ## Variables:
 | Variable | default | description |
 |---|---|---|

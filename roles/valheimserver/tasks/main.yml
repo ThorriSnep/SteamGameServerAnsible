@@ -1,4 +1,14 @@
 ---
+- name: Check distribution
+  fail:
+    msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not supported"
+  when:
+    - not ((ansible_distribution == "Ubuntu" and ansible_distribution_version == "20.04") or
+        (ansible_distribution == "Ubuntu" and ansible_distribution_version == "18.04") or
+        (ansible_distribution == "Debian" and ansible_distribution_major_version == "10") or
+        (ansible_distribution == "Debian" and ansible_distribution_major_version == "9"))
+        
+
 - name: Create the Steam directory for SteamCMD
   ansible.builtin.file:
     path: "~/Steam"
@@ -27,6 +37,18 @@
         update_cache: yes
         name: lib32gcc-s1
         state: latest
+      when: 
+       - ansible_distribution == "Ubuntu" and ansible_distribution_version == "20.04"
+
+    - name: Install lib32gcc1
+      ansible.builtin.apt:
+        update_cache: yes
+        name: lib32gcc1
+        state: latest
+      when: 
+       - (ansible_distribution == "Debian" and ansible_distribution_major_version == "10") or
+          (ansible_distribution == "Ubuntu" and ansible_distribution_version == "18.04") or
+          (ansible_distribution == "Debian" and ansible_distribution_major_version == "9")
 
   become: true
   become_user: root
