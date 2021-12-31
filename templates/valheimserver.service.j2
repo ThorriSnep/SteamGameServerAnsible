@@ -1,0 +1,13 @@
+[Unit]
+Description=Valheim server service
+[Service]
+Type=simple
+User={{ valheim_usr }}
+Group={{ steam_usrs_group}}
+WorkingDirectory=/home/{{ valheim_usr }}/Valheimserver
+Restart=on-failure
+RestartSec=5s
+ExecStart=/home/{{ valheim_usr }}/Valheimserver/start_server.sh
+SyslogIdentifier=Valheimserver
+[Install]
+WantedBy=multi-user.target
