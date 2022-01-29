@@ -1,12 +1,16 @@
-# AnsibleValheimPlaybook
-An Ansible playbook to set up a dedicated Valheim server
+# Steam game servers Ansible (dev)
+An Ansible playbook to set up a dedicated game servers trough the Steam CLI
+
+Supported games:
+- Valheim
+- Satisfactory (not fully tested yet)
 
 
-Works on:
+Tested on:
 - Ubuntu 20.04
 - Ubuntu 18.04
 - Debian 10
-- Debian 9
+- Debian 9 (EOL)
 
 ## Variables:
 | Variable | default | description |
