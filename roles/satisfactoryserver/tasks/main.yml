@@ -70,7 +70,7 @@
 
 - name: Install Valheim dedicated Server
   ansible.builtin.command: 
-    cmd: "bash ~/Steam/steamcmd.sh +@sSteamCmdForcePlatformType linux +force_install_dir ~/ValheimServer +login anonymous +app_update 896660 validate +quit"
+    cmd: "bash ~/Steam/steamcmd.sh +@sSteamCmdForcePlatformType linux +force_install_dir ~/SatisfactoryServer +login anonymous +app_update 1690800 -beta public validate +quit"
 
 - name: Create Valheim config  
   ansible.builtin.template:
